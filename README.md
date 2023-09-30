@@ -39,7 +39,7 @@ SEMINAR=<enter your seminar score if in 403>
 PROJECT=<enter your project score if in 403>
 ```
 
-2) Change moderation permissions
+2) Change executable permissions:
    
 ```
 chmod +x run.sh
@@ -51,7 +51,7 @@ chmod +x run.sh
 ./run.sh
 ```
 
-4) Your result should now be visible inside result.txt
+4) Your result should now be visible inside ```result.txt```
 
 ### Example .env files
 
