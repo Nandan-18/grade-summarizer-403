@@ -21,18 +21,51 @@ It will also never scrape your project score (for 403 students) since that will 
 Required nonstandard libraries:
 * bs4
 * requests
+* python-dotenv
+
+```
+pip install -r requirements.txt
+```
 
 ### Usage
 
-    python3 main.py <kattis-username> "<password>" <coursefile> [<seminar-score> <project-score>]
+1) Create a .env file with the following contents:
+   
+```
+USERNAME=<enter your actual kattis username>
+PASSWORD=<enter your actual kattis password>
+COURSE=<enter 303 or 403>
+SEMINAR=<enter your seminar score if in 403>
+PROJECT=<enter your project score if in 403>
+```
 
-### Examples
+2) Change moderation permissions
+   
+```
+chmod +x run.sh
+```
 
-    python3 main.py smith abc123 c303.txt
+3) Run the script!
+   
+```
+./run.sh
+```
+
+4) Your result should now be visible inside result.txt
+
+### Example .env files
+
+    USERNAME=john-doe
+    PASSWORD=password123
+    COURSE=303
 
 or
 
-    python3 main.py smith abc123 c403.txt 8 12.5
+    USERNAME=grace-hopper
+    PASSWORD=password321
+    COURSE=403
+    SEMINAR=10.0
+    PROJECT=15.0
 
 ### Parameter Explanation
 * \<kattis-username\>:

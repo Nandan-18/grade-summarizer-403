@@ -19,31 +19,34 @@ if course not in {"cmput303.txt", "cmput403.txt"}:
     print("Should be one of cmput303.txt or cmput403.txt")
 
 if len(sys.argv) >= 5:
-    if course == "cmput303.txt":
-        print("Bad parameters: project grades only expected for CMPUT 403 students")
-        quit()
+    if course == "cmput403.txt":
+        if len(sys.argv) != 6:
+            print("Error: SEMINAR and PROJECT must be set when COURSE=403.")
+            exit(1)
 
-    try:
-        seminar_total = float(sys.argv[4])
-    except:
+        try:
+            seminar_total = float(sys.argv[4])
+        except:
+            seminar_total = -1.0
+        try:
+            project_total = float(sys.argv[5])
+        except:
+            project_total = -1.0
+
+        if seminar_total < 0.0 or seminar_total > 10.0:
+            print("Bad seminar total:", sys.argv[4])
+            print("Should be a floating point value between 0.0 and 10.0")
+            quit()
+        if project_total < 0.0 or project_total > 15.0:
+            print("Bad project total:", sys.argv[5])
+            print("Should be a floating point value between 0.0 and 15.0")
+            quit()
+    else:
         seminar_total = -1.0
-    try:
-        project_total = float(sys.argv[5])
-    except:
         project_total = -1.0
-
-    if seminar_total < 0.0 or seminar_total > 10.0:
-        print("Bad project total:", sys.argv[4])
-        print("Should be a floating point value between 0.0 and 20.0")
-        quit()
-    if project_total < 0.0 or project_total > 15.0:
-        print("Bad project total:", sys.argv[5])
-        print("Should be a floating point value between 0.0 and 20.0")
-        quit()
 else:
     project_total = 0.0
     seminar_total = 0.0
-
 # Get the assignment specification data (problems, deadlines, etc)
 assignments = problems.getAssignments(course)
 
