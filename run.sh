@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-python3 main.py nandan-ramesh "$password" cmput303.txt > output.txt
+if [[ -f .env ]]; then
+    source .env
+fi
+
+python3 main.py "$USERNAME" "$PASSWORD" cmput303.txt > output.txt
