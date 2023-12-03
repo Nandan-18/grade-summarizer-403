@@ -4,7 +4,7 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 
-_HEADERS = {'User-Agent': 'kattis-scraper'}
+_HEADERS = {"User-Agent": "kattis-scraper"}
 loginurl = "https://open.kattis.com/login"
 
 
@@ -14,11 +14,11 @@ def login(s, login_url, username, password=None, token=None):
     Returns a requests.
     Response with cookies needed to be able to submit.
     """
-    login_args = {'user': username, 'script': 'true'}
+    login_args = {"user": username, "script": "true"}
     if password:
-        login_args['password'] = password
+        login_args["password"] = password
     if token:
-        login_args['token'] = token
+        login_args["token"] = token
 
     return s.post(login_url, data=login_args, headers=_HEADERS)
 
@@ -30,11 +30,11 @@ def getSolvedProblems(session, user, course_start):
 
     print("scraping", url)
     r = session.get(url)
-    soup = BeautifulSoup(r.text, 'html.parser')
+    soup = BeautifulSoup(r.text, "html.parser")
 
     out = dict()
     while True:
-        trs = soup.findAll('tr')
+        trs = soup.findAll("tr")
 
         for problem in trs:
             # print("tr:", problem)
@@ -56,17 +56,21 @@ def getSolvedProblems(session, user, course_start):
             for element in problem_title_td:
                 # can cause an error if you have previous entries on ualberta.kattis
                 # normally not a problem for students taking the course
-                if element == bs4.NavigableString(' / '):
+                if element == bs4.NavigableString(" / "):
                     continue
                 problem_id = element["href"].split("/")[-1]
 
             time_formatted = problem.find("td", {"data-type": "time"}).string.strip()
             try:
-                date_time = datetime.datetime.strptime(time_formatted, "%Y-%m-%d %H:%M:%S")
+                date_time = datetime.datetime.strptime(
+                    time_formatted, "%Y-%m-%d %H:%M:%S"
+                )
             except:
                 # kattis sometimes does not display the date if submission was recent enough
                 time_formatted = str(current_day) + " " + time_formatted
-                date_time = datetime.datetime.strptime(time_formatted, "%Y-%m-%d %H:%M:%S")
+                date_time = datetime.datetime.strptime(
+                    time_formatted, "%Y-%m-%d %H:%M:%S"
+                )
 
             if date_time < course_start:
                 continue
@@ -76,7 +80,7 @@ def getSolvedProblems(session, user, course_start):
             out[problem_id] = min(out[problem_id], date_time)
 
         # determine if there is a "next" page
-        buttons = soup.findAll('a', {'id': 'problem_list_previous'})
+        buttons = soup.findAll("a", {"id": "problem_list_previous"})
         next_url = None
         for button in buttons:
             if button.text == "Next":
@@ -92,7 +96,7 @@ def getSolvedProblems(session, user, course_start):
 
             print("scraping", link)
             r = session.get(link)
-            soup = BeautifulSoup(r.text, 'html.parser')
+            soup = BeautifulSoup(r.text, "html.parser")
         else:
             break
 
@@ -104,11 +108,13 @@ def getAllSolvedProblems(username, password, course_start):
     # cache if you previously ran this before the end of the course.
     session = requests.Session()
     if login(session, loginurl, username, password).text != "Login successful":
-        print("Couldn't log you in. Are you sure you're using the right username/password?")
+        print(
+            "Couldn't log you in. Are you sure you're using the right username/password?"
+        )
         quit()
 
-    print("successfully logged in")
-    print("retrieving submissions...")
+    print("Successfully Logged In 🎉")
+    print("Retrieving Submissions...\n")
 
     solved = getSolvedProblems(session, username, course_start)
 
